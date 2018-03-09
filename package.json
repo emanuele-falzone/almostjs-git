@@ -1,0 +1,24 @@
+{
+  "name": "almostjs-git",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --recursive"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emanuele-falzone/almostjs-git.git"
+  },
+  "author": "Emanuele Falzone",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/emanuele-falzone/almostjs-git/issues"
+  },
+  "homepage": "https://github.com/emanuele-falzone/almostjs-git#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "assert": "^1.4.1",
+    "mocha": "^5.0.4"
+  }
+}
