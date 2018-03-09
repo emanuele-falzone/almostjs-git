@@ -1,10 +1,11 @@
 /*jslint node: true, nomen: true*/
 "use strict";
 
-var assert = require('assert');
+var assert = require('assert'),
+    lib = require('../lib');
 
 describe('Test', function () {
     it('should pass', function () {
-        assert.equal(true, true);
+        assert.equal(lib.alwaysTrue(), true);
     });
 });
