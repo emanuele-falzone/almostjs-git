@@ -1,8 +1,11 @@
 {
     "name": "almostjs-git",
-    "version": "1.0.0",
+    "version": "1.0.0-alpha.1",
     "description": "",
     "main": "index.js",
+    "directories": {
+        "bin": "./bin"
+    },
     "scripts": {
         "test": "mocha --recursive",
         "coverage": "istanbul cover node_modules/mocha/bin/_mocha -- --recursive",
@@ -18,7 +21,18 @@
         "url": "https://github.com/emanuele-falzone/almostjs-git/issues"
     },
     "homepage": "https://github.com/emanuele-falzone/almostjs-git#readme",
-    "dependencies": {},
+    "dependencies": {
+        "bluebird": "^3.5.1",
+        "command-line-args": "^5.0.2",
+        "command-line-usage": "^5.0.3",
+        "fs-extra": "^5.0.0",
+        "fstream": "^1.0.11",
+        "lodash": "^4.17.5",
+        "os": "^0.1.1",
+        "rimraf-promise": "^2.0.0",
+        "simple-git": "^1.92.0",
+        "unzip": "^0.1.11"
+    },
     "devDependencies": {
         "assert": "^1.4.1",
         "coveralls": "^3.0.0",
