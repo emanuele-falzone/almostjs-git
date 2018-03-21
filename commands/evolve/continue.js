@@ -3,7 +3,7 @@
 
 var _ = require('lodash'),
     fs = require('fs-extra'),
-    rm = require('rimraf-promise'),
+    rm = require('rmfr'),
     os = require('os'),
     path = require('path'),
     Promise = require('bluebird'),
