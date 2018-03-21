@@ -33,7 +33,7 @@ function completion(repository) {
     }).then(function () {
         return git.commit(['new_model', 'Model']);
     }).then(function () {
-        return git.diff(['master..final']);
+        return git.diff(['master..final', '--full-index', '--binary']);
     }).then(function (diff) {
         return fs.outputFile(path.join(tempFolder, 'patch.diff'), diff);
     }).then(function () {
@@ -44,6 +44,10 @@ function completion(repository) {
         return git.add('-A');
     }).then(function () {
         return git.commit('new_merged_model');
+    }).then(function () {
+        return git.branch(['-D', 'tmp']);
+    }).then(function () {
+        return git.branch(['-D', 'final']);
     });
 }
 

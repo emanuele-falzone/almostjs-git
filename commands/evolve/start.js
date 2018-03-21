@@ -12,7 +12,7 @@ function lastModelHash(data) {
     return _(data.all)
         .filter(function (log) {
             return log.description[0] === 'M';
-        }).sort('date').last().hash;
+        }).sort('date').first().hash;
 }
 
 function start(repository, newVersion) {

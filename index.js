@@ -40,6 +40,7 @@ if (mainOptions.command === 'init') {
     commands.init.initialize().then(function () {
         console.log("Git repository initialized!");
     }).catch(function (err) {
+        console.log(err);
         console.log('Invalid Command!');
         console.log(utils.commands.help.help());
     });
@@ -88,6 +89,7 @@ if (mainOptions.command === 'evolve') {
             }
         }
     }).catch(function (err) {
+        console.log(err);
         console.log('Invalid Command!');
         console.log(utils.commands.help.help());
     })
