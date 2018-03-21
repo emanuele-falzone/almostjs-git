@@ -4,7 +4,7 @@
 
 var assert = require('assert'),
     path = require('path'),
-    rm = require('rmfr'),
+    rm = require('rimraf-promise'),
     fs = require('fs-extra'),
     createGit = require('simple-git/promise'),
     _ = require('lodash'),

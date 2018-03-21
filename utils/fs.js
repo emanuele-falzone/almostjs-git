@@ -2,7 +2,7 @@
 "use strict";
 
 var fs = require('fs-extra'),
-    rm = require('rmfr'),
+    rm = require('rimraf-promise'),
     Promise = require('bluebird'),
     _ = require('lodash'),
     path = require('path');

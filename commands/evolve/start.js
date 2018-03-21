@@ -3,7 +3,7 @@
 
 var _ = require('lodash'),
     fs = require('fs-extra'),
-    rm = require('rmfr'),
+    rm = require('rimraf-promise'),
     Promise = require('bluebird'),
     createGit = require('simple-git/promise'),
     utils = require('../../utils');
