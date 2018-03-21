@@ -20,7 +20,7 @@ test_script:
   - git config --global user.email "you@example.com"
   - git config --global user.name "Your Name"
   # run tests
-  - npm test -- -t 5000
+  - npm test -- -t 20000
 
 # Don't actually build.
 build: off
