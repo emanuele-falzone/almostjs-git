@@ -16,6 +16,9 @@ test_script:
   # Output useful info for debugging.
   - node --version
   - npm --version
+  # Set global username and email
+  - git config --global user.email "you@example.com"
+  - git config --global user.name "Your Name"
   # run tests
   - npm test
 
