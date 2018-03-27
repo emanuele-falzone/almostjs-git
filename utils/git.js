@@ -4,27 +4,18 @@
 var createGit = require('simple-git/promise');
 
 function getTopLevel(folder) {
-    folder = folder || './';
-    return createGit(folder).raw([
-        'rev-parse',
+    return createGit(folder).revparse([
         '--show-toplevel'
     ]).then(function (root) {
         return root.trim();
     });
 }
 
-function isRebasing(folder) {
-    folder = folder || './';
+function isCleanRepo(folder) {
     return createGit(folder).status().then(function (status) {
-        return status.files.length;
+        return status.files.length === 0;
     });
 }
 
-function isRepository(folder) {
-    folder = folder || './';
-    return createGit(folder).checkIsRepo();
-}
-
 exports.getTopLevel = getTopLevel;
-exports.isRebasing = isRebasing;
-exports.isRepository = isRepository;
+exports.isCleanRepo = isCleanRepo;

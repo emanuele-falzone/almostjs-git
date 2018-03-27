@@ -1,11 +1,12 @@
 /*jslint node: true, nomen: true*/
 "use strict";
 
-var fs = require('fs-extra'),
+var _ = require('lodash'),
+    os = require('os'),
+    fs = require('fs-extra'),
     rm = require('rimraf-promise'),
-    Promise = require('bluebird'),
-    _ = require('lodash'),
-    path = require('path');
+    path = require('path'),
+    Promise = require('bluebird');
 
 function copy(source, destination) {
     return fs.readdir(source).then(function (files) {
@@ -31,5 +32,10 @@ function empty(folder) {
     });
 }
 
+function tempDir() {
+    return fs.mkdtemp(path.join(os.tmpdir(), 'almost-git-'));
+}
+
 exports.copy = copy;
 exports.empty = empty;
+exports.tempDir = tempDir;

@@ -1,23 +1,25 @@
 /*jslint node: true, nomen: true*/
 "use strict";
 
-var initialization = require('./start'),
-    completion = require('./continue'),
+var init = require('./init'),
+    progress = require('./progress'),
+    abort = require('./abort'),
+    finalize = require('./finalize'),
     utils = require('../../utils');
 
 function start(repository, folder) {
     return utils.git.getTopLevel(repository).then(function (root) {
-        return initialization(root, folder);
-    }).then(function (mergeSuccess) {
-        if (mergeSuccess) {
-            return completion(repository);
-        }
+        return init(root, folder);
+    }).then(function (success) {
+        return success || progress(repository);
+    }).then(function (success) {
+        return success && finalize(repository);
     });
 }
 
 function end(repository) {
-    return utils.git.getTopLevel(repository).then(function (root) {
-        return completion(root);
+    return progress(repository).then(function (success) {
+        return success && finalize(repository);
     });
 }
 

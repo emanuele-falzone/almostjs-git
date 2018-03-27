@@ -8,11 +8,10 @@ var _ = require('lodash'),
     path = require('path'),
     Promise = require('bluebird'),
     createGit = require('simple-git/promise'),
-    utils = require('../../utils');
+    utils = require('../../../utils');
 
-function completion(repository) {
-
-    var git = createGit(repository),
+function finalize(repository) {
+    var git = createGit(repository).silent(false),
         tempFolder;
 
     return git.checkout('tmp').then(function () {
@@ -31,7 +30,7 @@ function completion(repository) {
     }).then(function () {
         return git.add('-A');
     }).then(function () {
-        return git.commit(['new_model', 'Model']);
+        return git.commit(['New Model', 'Model']);
     }).then(function () {
         return git.diff(['master..final', '--full-index', '--binary']);
     }).then(function (diff) {
@@ -43,7 +42,7 @@ function completion(repository) {
     }).then(function () {
         return git.add('-A');
     }).then(function () {
-        return git.commit('new_merged_model');
+        return git.commit('New Merged Model');
     }).then(function () {
         return git.branch(['-D', 'tmp']);
     }).then(function () {
@@ -51,4 +50,4 @@ function completion(repository) {
     });
 }
 
-module.exports = completion;
+module.exports = finalize;

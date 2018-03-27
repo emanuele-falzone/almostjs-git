@@ -7,7 +7,8 @@ var utils = require('./utils'),
     commandLineArgs = require('command-line-args'),
     pjson = require('./package.json');
 
-var mainDefinitions = [{
+var mainDefinitions = [
+    {
         name: 'command',
         defaultOption: true
     },
@@ -31,13 +32,14 @@ if (mainOptions.help) {
     return console.log(utils.commands.help.help());
 }
 if (mainOptions.version) {
-    return console.log('Version: ' + pjson.version);
+    console.log('Version: ' + pjson.version);
+    return;
 }
 
 var argv = mainOptions._unknown || [];
 
 if (mainOptions.command === 'init') {
-    commands.init.initialize().then(function () {
+    commands.init.initialize('./').then(function () {
         console.log("Git repository initialized!");
     }).catch(function (err) {
         console.log(err);
@@ -50,7 +52,7 @@ if (mainOptions.command === 'evolve') {
 
     utils.git.isRepository().then(function (isRepo) {
         if (isRepo) {
-            return utils.git.isRebasing()
+            return utils.git.isRebasing('./')
         }
         throw new Error('This is not a git repository!');
     }).then(function (rebasing) {
@@ -68,10 +70,10 @@ if (mainOptions.command === 'evolve') {
             if (options.continue) {
                 return createGit().rebase(['--continue']).then(function () {
                     commands.evolve.end('./');
-                })
-            } else {
-                throw new Error('USAGE: evolve --continue');
+                });
             }
+            throw new Error('USAGE: evolve --continue');
+
         } else {
             var definitions = [{
                     name: 'dir',
@@ -84,14 +86,14 @@ if (mainOptions.command === 'evolve') {
 
             if (options.dir) {
                 return commands.evolve.start('./', options.dir);
-            } else {
-                throw new Error('USAGE: evolve <dir>');
             }
+            throw new Error('USAGE: evolve <dir>');
+
         }
     }).catch(function (err) {
         console.log(err);
         console.log('Invalid Command!');
         console.log(utils.commands.help.help());
-    })
+    });
 
 }

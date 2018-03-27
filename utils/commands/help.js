@@ -22,7 +22,7 @@ var sections = [
         header: 'Options',
         optionList: [
             {
-                name: 'varsion',
+                name: 'version',
                 description: 'Print the version.'
             },
             {

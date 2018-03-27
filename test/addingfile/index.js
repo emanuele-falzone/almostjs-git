@@ -2,61 +2,28 @@
 /*globals describe, it, beforeEach, afterEach, __dirname*/
 "use strict";
 
-var assert = require('assert'),
-    path = require('path'),
-    rm = require('rimraf-promise'),
+var _ = require('lodash'),
     fs = require('fs-extra'),
+    rm = require('rimraf-promise'),
+    path = require('path'),
+    assert = require('assert'),
     createGit = require('simple-git/promise'),
-    _ = require('lodash'),
     Promise = require('bluebird'),
-    commands = require('../../commands');
-
-function assertDifferent(actual, expected, ignore) {
-    return Promise.all([
-        fs.stat(actual),
-        fs.stat(expected)
-    ]).then(function (stats) {
-        assert.equal(stats[0].isDirectory(), stats[1].isDirectory());
-        if (stats[0].isDirectory()) {
-            return Promise.all([
-                fs.readdir(actual).then(function (files) {
-                    return _.without(files, ignore);
-                }),
-                fs.readdir(expected)
-            ]).then(function (files) {
-                files[0].sort();
-                files[1].sort();
-                assert.deepEqual(files[0], files[1]);
-                return Promise.all(_.map(files[0], function (file) {
-                    return assertDifferent(path.join(actual, file), path.join(expected, file));
-                }));
-            });
-        }
-        return Promise.all([
-            fs.readFile(actual),
-            fs.readFile(expected)
-        ]).then(function (contents) {
-            assert.deepEqual(contents[0], contents[1]);
-        });
-    });
-}
+    commands = require('../../commands'),
+    utils = require('../../utils'),
+    testUtils = require('../utils');
 
 describe('Add a File without conflicts', function () {
     var repoPath,
-        m0Path,
-        f0Path,
-        m1Path,
-        finalPath,
+        m0Path = path.join(__dirname, 'm0'),
+        f0Path = path.join(__dirname, 'f0'),
+        m1Path = path.join(__dirname, 'm1'),
+        finalPath = path.join(__dirname, 'final'),
         git;
-    beforeEach(function (done) {
-        repoPath = path.join(__dirname, 'tmp');
-        m0Path = path.join(__dirname, 'm0');
-        f0Path = path.join(__dirname, 'f0');
-        m1Path = path.join(__dirname, 'm1');
-        finalPath = path.join(__dirname, 'final');
 
-        rm(repoPath).then(function () {
-            return fs.ensureDir(repoPath);
+    beforeEach(function (done) {
+        utils.fs.tempDir().then(function (folder) {
+            repoPath = folder;
         }).then(function () {
             git = createGit(repoPath);
             return git.init();
@@ -82,13 +49,15 @@ describe('Add a File without conflicts', function () {
             done(error);
         });
     });
-    afterEach(function (done) {
+
+    /*afterEach(function (done) {
         rm(repoPath).then(function () {
             done();
         }).catch(function (error) {
             done(error);
         });
-    });
+    });*/
+
     it('should not leave a clean repository', function (done) {
         git.status().then(function (status) {
             assert.deepEqual(status, {
@@ -111,7 +80,7 @@ describe('Add a File without conflicts', function () {
     });
 
     it('should reach the final state', function (done) {
-        assertDifferent(repoPath, finalPath, '.git').then(function () {
+        testUtils.assertDifferent(repoPath, finalPath, '.git').then(function () {
             done();
         }).catch(function (err) {
             done(err);
@@ -120,7 +89,7 @@ describe('Add a File without conflicts', function () {
 
     it('should add the Model commit', function (done) {
         git.checkout('HEAD~1').then(function () {
-            return assertDifferent(repoPath, m1Path, '.git');
+            return testUtils.assertDifferent(repoPath, m1Path, '.git');
         }).then(function () {
             done();
         }).catch(function (err) {
@@ -130,7 +99,7 @@ describe('Add a File without conflicts', function () {
 
     it('should preserve the Feature commit', function (done) {
         git.checkout('HEAD~2').then(function () {
-            return assertDifferent(repoPath, f0Path, '.git');
+            return testUtils.assertDifferent(repoPath, f0Path, '.git');
         }).then(function () {
             done();
         }).catch(function (err) {
@@ -140,7 +109,7 @@ describe('Add a File without conflicts', function () {
 
     it('should preserve the Initial Model commit', function (done) {
         git.checkout('HEAD~3').then(function () {
-            return assertDifferent(repoPath, m0Path, '.git');
+            return testUtils.assertDifferent(repoPath, m0Path, '.git');
         }).then(function () {
             done();
         }).catch(function (err) {

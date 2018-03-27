@@ -13,14 +13,13 @@ var _ = require('lodash'),
     utils = require('../../utils'),
     testUtils = require('../utils');
 
-describe('Remove a File with conflicts', function () {
+describe('Modify a File without conflicts', function () {
     var repoPath,
         m0Path = path.join(__dirname, 'm0'),
         f0Path = path.join(__dirname, 'f0'),
         m1Path = path.join(__dirname, 'm1'),
         finalPath = path.join(__dirname, 'final'),
         git;
-
     beforeEach(function (done) {
         utils.fs.tempDir().then(function (folder) {
             repoPath = folder;
@@ -44,12 +43,8 @@ describe('Remove a File with conflicts', function () {
             return git.commit('First feature');
         }).then(function () {
             return commands.evolve.start(repoPath, m1Path);
-        }).then(function (success) {
-            if (success) {
-                done();
-            } else {
-                done(new Error('it should not reach this state'));
-            }
+        }).then(function () {
+            done();
         }).catch(function (error) {
             done(error);
         });
@@ -83,6 +78,7 @@ describe('Remove a File with conflicts', function () {
             done(err);
         });
     });
+
 
     it('should reach the final state', function (done) {
         testUtils.assertDifferent(repoPath, finalPath, '.git').then(function () {
