@@ -1,0 +1,5 @@
+header-foo
+=====
+foo1
+=====
+footer-foo
