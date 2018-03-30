@@ -30,8 +30,6 @@ function abort(repository) {
         return utils.fs.deleteAlmostFile(rootFolder);
     }).then(function () {
         return true;
-    }).catch(function () {
-        return false;
     });
 }
 

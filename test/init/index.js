@@ -24,9 +24,6 @@ describe('Init repo without conflicts', function () {
         }).then(function () {
             return fs.copy(m0Path, repoPath);
         }).then(function () {
-            return commands.init(repoPath);
-        }).then(function () {
-            git = createGit(repoPath);
             done();
         }).catch(function (error) {
             done(error);
@@ -41,32 +38,67 @@ describe('Init repo without conflicts', function () {
         });
     });
 
-    it('should leave a clean repository', function (done) {
-        git.status().then(function (status) {
+    it('should not be a repository', function (done) {
+        commands.status.code(repoPath).then(function (status) {
             assert.deepEqual(status, {
-                not_added: [],
-                conflicted: [],
-                created: [],
-                deleted: [],
-                modified: [],
-                renamed: [],
-                files: [],
-                ahead: 0,
-                behind: 0,
-                current: 'master',
-                tracking: null
+                description: 'not a repository'
             });
-            done();
+            commands.status.printable(repoPath).then(function (output) {
+                assert.equal(typeof output, 'string');
+                done();
+            });
         }).catch(function (err) {
             done(err);
         });
     });
 
-    it('should add the Model commit', function (done) {
-        testUtils.assertDifferent(repoPath, m0Path, '.git').then(function () {
-            done();
-        }).catch(function (err) {
-            done(err);
+    describe('run init commands without conflics', function () {
+        beforeEach(function (done) {
+            commands.init(repoPath).then(function () {
+                git = createGit(repoPath);
+                done();
+            }).catch(function (error) {
+                done(error);
+            });
+        });
+        it('should leave a clean repository', function (done) {
+            git.status().then(function (status) {
+                assert.deepEqual(status, {
+                    not_added: [],
+                    conflicted: [],
+                    created: [],
+                    deleted: [],
+                    modified: [],
+                    renamed: [],
+                    files: [],
+                    ahead: 0,
+                    behind: 0,
+                    current: 'master',
+                    tracking: null
+                });
+                done();
+            }).catch(function (err) {
+                done(err);
+            });
+        });
+
+        it('should add the Model commit', function (done) {
+            testUtils.assertDifferent(repoPath, m0Path, '.git').then(function () {
+                done();
+            }).catch(function (err) {
+                done(err);
+            });
+        });
+
+        it('should be a not evolving repository', function (done) {
+            commands.status.code(repoPath).then(function (status) {
+                assert.deepEqual(status, {
+                    description: 'not evolving'
+                });
+                done();
+            }).catch(function (err) {
+                done(err);
+            });
         });
     });
 });

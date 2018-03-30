@@ -115,6 +115,18 @@ describe('Modify a File with conflicts', function () {
         });
     });
 
+    it('should be an evolving repository', function (done) {
+        commands.status.code(repoPath).then(function (status) {
+            assert.deepEqual(status.description, 'evolving');
+            commands.status.printable(repoPath).then(function (output) {
+                assert.equal(typeof output, 'string');
+                done();
+            });
+        }).catch(function (err) {
+            done(err);
+        });
+    });
+
     describe('resolve conflicts and terminate', function () {
 
         beforeEach(function (done) {
@@ -173,6 +185,20 @@ describe('Modify a File with conflicts', function () {
                 return testUtils.assertDifferent(repoPath, m0Path, '.git');
             }).then(function () {
                 done();
+            }).catch(function (err) {
+                done(err);
+            });
+        });
+
+        it('should be a not evolving repository', function (done) {
+            commands.status.code(repoPath).then(function (status) {
+                assert.deepEqual(status, {
+                    description: 'not evolving'
+                });
+                commands.status.printable(repoPath).then(function (output) {
+                    assert.equal(typeof output, 'string');
+                    done();
+                });
             }).catch(function (err) {
                 done(err);
             });

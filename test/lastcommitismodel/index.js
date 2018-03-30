@@ -103,4 +103,18 @@ describe('Evolve using the same model', function () {
             done(err);
         });
     });
+
+    it('should be a not evolving repository', function (done) {
+        commands.status.code(repoPath).then(function (status) {
+            assert.deepEqual(status, {
+                description: 'not evolving'
+            });
+            commands.status.printable(repoPath).then(function (output) {
+                assert.equal(typeof output, 'string');
+                done();
+            });
+        }).catch(function (err) {
+            done(err);
+        });
+    });
 });

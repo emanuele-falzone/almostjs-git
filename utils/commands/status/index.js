@@ -13,6 +13,7 @@ var options = [
     }
 ];
 
+// istanbul ignore next 
 function parse() {
     return commandLineArgs(options, {
         partial: true

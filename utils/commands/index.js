@@ -57,6 +57,7 @@ function help() {
     return commandLineUsage(sections);
 }
 
+// istanbul ignore next 
 function parse() {
     return commandLineArgs(options, {
         partial: true
