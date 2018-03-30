@@ -39,13 +39,15 @@ function finalize(repository) {
     }).then(function () {
         return git.diff('master', config.branches.final);
     }).then(function (diff) {
-        return utils.fs.saveContentToFile(diff, patchPath);
-    }).then(function () {
-        return git.apply(patchPath);
+        if (diff.length > 0) {
+            return utils.fs.saveContentToFile(diff, patchPath).then(function () {
+                return git.apply(patchPath);
+            }).then(function () {
+                return git.addAllAndCommit('New Merged Model');
+            });
+        }
     }).then(function () {
         return utils.fs.remove(tempFolder);
-    }).then(function () {
-        return git.addAllAndCommit('New Merged Model');
     }).then(function () {
         return git.deleteBranch(config.branches.tmp);
     }).then(function () {
