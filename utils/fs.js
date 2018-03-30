@@ -36,6 +36,33 @@ function tempDir() {
     return fs.mkdtemp(path.join(os.tmpdir(), 'almost-git-'));
 }
 
+function remove(path) {
+    return rm(path);
+}
+
+function saveContentToFile(content, path) {
+    return fs.outputFile(path, content);
+}
+
+function readAlmostFile(root) {
+    return fs.readFile(path.join(root, '.git/almost-git/index.js'), 'utf8').then(function (data) {
+        return JSON.parse(data);
+    });
+}
+
+function saveAlmostFile(content, root) {
+    return saveContentToFile(JSON.stringify(content), path.join(root, '.git/almost-git/index.js'));
+}
+
+function deleteAlmostFile(root) {
+    return rm(path.join(root, '.git/almost-git/index.js'));
+}
+
 exports.copy = copy;
 exports.empty = empty;
 exports.tempDir = tempDir;
+exports.remove = remove;
+exports.saveContentToFile = saveContentToFile;
+exports.readAlmostFile = readAlmostFile;
+exports.saveAlmostFile = saveAlmostFile;
+exports.deleteAlmostFile = deleteAlmostFile;

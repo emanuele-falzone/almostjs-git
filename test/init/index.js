@@ -24,7 +24,7 @@ describe('Init repo without conflicts', function () {
         }).then(function () {
             return fs.copy(m0Path, repoPath);
         }).then(function () {
-            return commands.init.initialize(repoPath);
+            return commands.init(repoPath);
         }).then(function () {
             git = createGit(repoPath);
             done();

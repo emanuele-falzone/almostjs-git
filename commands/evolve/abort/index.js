@@ -1,18 +1,29 @@
 /*jslint node: true, nomen: true*/
 "use strict";
 
-var createGit = require('simple-git/promise');
+var Git = require('../../../lib').Git,
+    utils = require('../../../utils');
 
 function abort(repository) {
 
-    var git = createGit(repository).silent(false);
+    var git = Git(repository),
+        config;
 
-    return git.clean('f').then(function () {
+    return git.getTopLevel().then(function (root) {
+        return utils.fs.readAlmostFile(root);
+    }).then(function (obj) {
+        config = obj;
+        return git.setTopLevel();
+    }).then(function () {
+        return git.clean();
+    }).then(function () {
+        return git.abortRebase();
+    }).then(function () {
         return git.checkout('master');
     }).then(function () {
-        return git.branch(['-D', 'tmp']);
+        return git.deleteBranch(config.branches.tmp);
     }).then(function () {
-        return git.branch(['-D', 'final']);
+        return git.deleteBranch(config.branches.final);
     });
 }
 

@@ -31,7 +31,7 @@ describe('Init repo without conflicts', function () {
         }).then(function () {
             return git.commit(['Initial version', 'Model']);
         }).then(function () {
-            return commands.init.initialize(repoPath);
+            return commands.init(repoPath);
         }).then(function () {
             done(new Error());
         }).catch(function () {

@@ -1,23 +1,30 @@
 /*jslint node: true, nomen: true*/
 "use strict";
 
-var _ = require('lodash'),
-    fs = require('fs-extra'),
-    rm = require('rimraf-promise'),
-    os = require('os'),
-    path = require('path'),
-    Promise = require('bluebird'),
-    createGit = require('simple-git/promise'),
-    utils = require('../../../utils');
+var path = require('path'),
+    utils = require('../../../utils'),
+    Git = require('../../../lib').Git;
 
 function finalize(repository) {
-    var git = createGit(repository).silent(false),
-        tempFolder;
+    var git = Git(repository),
+        tempFolder,
+        rootFolder,
+        patchPath,
+        config;
 
-    return git.checkout('tmp').then(function () {
-        return fs.mkdtemp(path.join(os.tmpdir(), 'git-'));
+    return git.getTopLevel().then(function (root) {
+        rootFolder = root;
+        return utils.fs.readAlmostFile(root);
+    }).then(function (obj) {
+        config = obj;
+        return git.setTopLevel();
+    }).then(function () {
+        return git.checkout(config.branches.tmp);
+    }).then(function () {
+        return utils.fs.tempDir();
     }).then(function (folder) {
         tempFolder = folder;
+        patchPath = path.join(tempFolder, 'patch.diff');
         return utils.fs.copy(repository, tempFolder);
     }).then(function () {
         return git.checkout('master');
@@ -28,25 +35,27 @@ function finalize(repository) {
     }).then(function () {
         return utils.fs.empty(tempFolder);
     }).then(function () {
-        return git.add('-A');
+        return git.addAllAndCommit(['New Model', 'Model']);
     }).then(function () {
-        return git.commit(['New Model', 'Model']);
-    }).then(function () {
-        return git.diff(['master..final', '--full-index', '--binary']);
+        return git.diff('master', config.branches.final);
     }).then(function (diff) {
-        return fs.outputFile(path.join(tempFolder, 'patch.diff'), diff);
+        return utils.fs.saveContentToFile(diff, patchPath);
     }).then(function () {
-        return git.raw(['apply', path.join(tempFolder, 'patch.diff')]);
+        return git.apply(patchPath);
     }).then(function () {
-        return rm(tempFolder);
+        return utils.fs.remove(tempFolder);
     }).then(function () {
-        return git.add('-A');
+        return git.addAllAndCommit('New Merged Model');
     }).then(function () {
-        return git.commit('New Merged Model');
+        return git.deleteBranch(config.branches.tmp);
     }).then(function () {
-        return git.branch(['-D', 'tmp']);
+        return git.deleteBranch(config.branches.final);
     }).then(function () {
-        return git.branch(['-D', 'final']);
+        return utils.fs.deleteAlmostFile(rootFolder);
+    }).then(function () {
+        return true;
+    }).catch(function () {
+        return false;
     });
 }
 
