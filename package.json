@@ -1,6 +1,6 @@
 {
     "name": "almost-git",
-    "version": "1.0.0-alpha.3",
+    "version": "1.0.0-alpha.4",
     "description": "almost-git is a tool for model and text co-evolution",
     "main": "index.js",
     "directories": {
