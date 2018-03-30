@@ -50,15 +50,15 @@ describe('Add a File without conflicts', function () {
         });
     });
 
-    /*afterEach(function (done) {
+    afterEach(function (done) {
         rm(repoPath).then(function () {
             done();
         }).catch(function (error) {
             done(error);
         });
-    });*/
+    });
 
-    it('should not leave a clean repository', function (done) {
+    it('should leave a clean repository', function (done) {
         git.status().then(function (status) {
             assert.deepEqual(status, {
                 not_added: [],
@@ -76,6 +76,14 @@ describe('Add a File without conflicts', function () {
             done();
         }).catch(function (err) {
             done(err);
+        });
+    });
+
+    it('should delete the almost-git file inside .git folder', function (done) {
+        utils.fs.readAlmostFile(repoPath).then(function () {
+            done(new Error('The config file is still there'));
+        }).catch(function () {
+            done();
         });
     });
 

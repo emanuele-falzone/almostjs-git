@@ -79,6 +79,13 @@ describe('Modify a File without conflicts', function () {
         });
     });
 
+    it('should delete the almost-git file inside .git folder', function (done) {
+        utils.fs.readAlmostFile(repoPath).then(function () {
+            done(new Error('The config file is still there'));
+        }).catch(function () {
+            done();
+        });
+    });
 
     it('should reach the final state', function (done) {
         testUtils.assertDifferent(repoPath, finalPath, '.git').then(function () {

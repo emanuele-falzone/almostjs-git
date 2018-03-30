@@ -7,9 +7,11 @@ var Git = require('../../../lib').Git,
 function abort(repository) {
 
     var git = Git(repository),
+        rootFolder,
         config;
 
     return git.getTopLevel().then(function (root) {
+        rootFolder = root;
         return utils.fs.readAlmostFile(root);
     }).then(function (obj) {
         config = obj;
@@ -24,6 +26,12 @@ function abort(repository) {
         return git.deleteBranch(config.branches.tmp);
     }).then(function () {
         return git.deleteBranch(config.branches.final);
+    }).then(function () {
+        return utils.fs.deleteAlmostFile(rootFolder);
+    }).then(function () {
+        return true;
+    }).catch(function () {
+        return false;
     });
 }
 

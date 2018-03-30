@@ -55,13 +55,13 @@ describe('Modify a File with conflicts', function () {
         });
     });
 
-    /*afterEach(function (done) {
+    afterEach(function (done) {
         rm(repoPath).then(function () {
             done();
         }).catch(function (error) {
             done(error);
         });
-    });*/
+    });
 
     it('should not leave a clean repository', function (done) {
         git.status().then(function (status) {
@@ -107,6 +107,14 @@ describe('Modify a File with conflicts', function () {
         });
     });
 
+    it('should add the almost-git file inside .git folder', function (done) {
+        utils.fs.readAlmostFile(repoPath).then(function () {
+            done();
+        }).catch(function (err) {
+            done(err);
+        });
+    });
+
     describe('resolve conflicts and terminate', function () {
 
         beforeEach(function (done) {
@@ -128,6 +136,15 @@ describe('Modify a File with conflicts', function () {
                 done();
             }).catch(function (err) {
                 done(err);
+            });
+        });
+
+        it('should delete the almost-git file inside .git folder', function (done) {
+            utils.fs.readAlmostFile(repoPath).then(function (a) {
+                console.log(a);
+                done(new Error('The config file is still there'));
+            }).catch(function () {
+                done();
             });
         });
 
