@@ -31,10 +31,19 @@ function progress(repository) {
                 });
             });
         }).catch(function () {
-            return git.skipRebase().then(function () {
-                return git.isCleanRepo();
-            }).then(function (clean) {
-                return clean || progress(repository);
+            return git.status().then(function (status) {
+                return _(status.files).filter(function (item) {
+                    return item.index === 'D' && item.working_dir === 'U';
+                }).value();
+            }).then(function (files) {
+                if (files.length === 0) {
+                    return false;
+                }
+                return git.skipRebase().then(function () {
+                    return git.isCleanRepo();
+                }).then(function (clean) {
+                    return clean || progress(repository);
+                });
             });
         });
     });

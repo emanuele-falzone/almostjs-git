@@ -1,0 +1,9 @@
+=====
+<<<<<<< HEAD
+res
+=====
+bar
+=======
+bar1
+>>>>>>> Second feature
+=====

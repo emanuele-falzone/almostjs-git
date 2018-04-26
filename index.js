@@ -99,4 +99,5 @@ Promise.resolve(result).then(function (log) {
     console.log(log);
 }).catch(function (err) {
     console.log('This should never happen! =(');
+    console.log(err);
 });
