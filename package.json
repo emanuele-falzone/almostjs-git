@@ -1,15 +1,15 @@
 {
     "name": "almost-git",
-    "version": "1.0.0-alpha.5",
+    "version": "1.0.0-alpha.6",
     "description": "almost-git is a tool for model and text co-evolution",
     "main": "index.js",
     "directories": {
         "bin": "./bin"
     },
     "scripts": {
-        "test": "mocha --recursive",
-        "coverage": "istanbul cover node_modules/mocha/bin/_mocha -- --recursive",
-        "coveralls": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- --recursive -t 20000 -R spec && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage"
+        "test": "mocha --recursive --timeout 20000",
+        "coverage": "istanbul cover node_modules/mocha/bin/_mocha -- --recursive --timeout 20000",
+        "coveralls": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- --recursive --timeout 20000 -R spec && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage"
     },
     "repository": {
         "type": "git",
@@ -27,7 +27,7 @@
         "command-line-usage": "^5.0.3",
         "fs-extra": "^5.0.0",
         "fstream": "^1.0.11",
-        "lodash": "^4.17.5",
+        "lodash": "^4.17.10",
         "os": "^0.1.1",
         "rimraf-promise": "^2.0.0",
         "simple-git": "^1.92.0",
