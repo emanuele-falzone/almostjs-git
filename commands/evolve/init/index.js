@@ -10,7 +10,7 @@ var _ = require('lodash'),
 function lastModelHash(data) {
     return _(data.all).filter(function (log) {
         return log.description === 'Model';
-    }).sort('date').first().hash;
+    }).sortBy('date').last().hash;
 }
 
 function randomString(length) {
