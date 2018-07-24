@@ -1,6 +1,6 @@
 {
     "name": "almost-git",
-    "version": "1.0.0-alpha.6",
+    "version": "1.0.0-alpha.8",
     "description": "almost-git is a tool for model and text co-evolution",
     "main": "index.js",
     "directories": {
@@ -30,7 +30,7 @@
         "lodash": "^4.17.10",
         "os": "^0.1.1",
         "rimraf-promise": "^2.0.0",
-        "simple-git": "^1.95.1",
+        "simple-git": "1.95.1",
         "unzip": "^0.1.11"
     },
     "devDependencies": {
