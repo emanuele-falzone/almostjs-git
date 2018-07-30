@@ -6,7 +6,9 @@ var _ = require('lodash'),
     fs = require('fs-extra'),
     path = require('path'),
     assert = require('assert'),
-    Promise = require('bluebird');
+    Promise = require('bluebird'),
+    Git = require('simple-git/promise');
+
 
 function assertDifferent(actual, expected, ignore) {
     return Promise.all([
@@ -38,4 +40,20 @@ function assertDifferent(actual, expected, ignore) {
     });
 }
 
+function commit(repoPath, featurePath) {
+    var git = Git(repoPath);
+    return fs.readdir(repoPath).then(files => {
+        return Promise.all(files.filter((src) => {
+            return !['.git'].includes(path.basename(src))
+        }).map(file => fs.remove(file)))
+    }).then(function () {
+        return fs.copy(featurePath, repoPath);
+    }).then(function () {
+        return git.add('-A');
+    }).then(function () {
+        return git.commit('feature');
+    })
+}
+
 exports.assertDifferent = assertDifferent;
+exports.commit = commit;

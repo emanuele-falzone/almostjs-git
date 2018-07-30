@@ -1,4 +1,6 @@
 #!/usr/bin/env node
-'use strict';
-
-require('../index');
+require('yargs')
+  .commandDir('cmds')
+  .demandCommand()
+  .help()
+  .argv
