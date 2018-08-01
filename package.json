@@ -2,10 +2,13 @@
     "name": "almost-git",
     "version": "1.0.0-alpha.8",
     "description": "almost-git is a tool for model and text co-evolution",
-    "main": "index.js",
-    "directories": {
-        "bin": "./bin"
-    },
+    "keywords": [
+        "model-driven-development",
+        "git", 
+        "versioning", 
+        "code-evolution"
+    ],
+    "bin": "./bin/cli.js",
     "scripts": {
         "test": "mocha --recursive --timeout 20000",
         "coverage": "istanbul cover node_modules/mocha/bin/_mocha -- --recursive --timeout 20000",

@@ -17,8 +17,10 @@ test_script:
   # Set global username and email
   - git config --global user.email "you@example.com"
   - git config --global user.name "Your Name"
+  # Workaround for https://github.com/appveyor/ci/issues/2420
+  - set "PATH=%PATH%;C:\Program Files\Git\mingw64\libexec\git-core"
   # run tests
-  - npm test -- -t 20000
+  - npm test
 
 # Don't actually build.
 build: off
