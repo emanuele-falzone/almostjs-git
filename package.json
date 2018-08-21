@@ -1,11 +1,11 @@
 {
     "name": "almost-git",
-    "version": "1.0.0-alpha.11",
+    "version": "1.0.0-alpha.12",
     "description": "almost-git is a tool for model and text co-evolution",
     "keywords": [
         "model-driven-development",
-        "git", 
-        "versioning", 
+        "git",
+        "versioning",
         "code-evolution"
     ],
     "bin": "./bin/cli.js",
