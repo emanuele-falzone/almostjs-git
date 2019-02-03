@@ -34,19 +34,19 @@ exports.builder = (yargs) => {
 exports.handler = (argv) => {
     middleware().then((folder) => {
         if (argv.src) {
-            lib.evolve.init(folder, argv.src)
+            return lib.evolve.init(folder, argv.src)
                 .then(() => {
                     console.log('Evolution completed!')
                 })
         }
         if (argv.abort) {
-            lib.evolve.abort(folder)
+            return lib.evolve.abort(folder)
                 .then(() => {
                     console.log('Evolution aborted!')
                 })
         }
         if (argv.continue) {
-            lib.evolve.continue(folder)
+            return lib.evolve.continue(folder)
                 .then(() => {
                     console.log('Evolution completed!')
                 })
