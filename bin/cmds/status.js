@@ -13,5 +13,7 @@ exports.handler = () => {
     return status.status()
   }).then((value) => {
     console.info(value);
+  }).catch((err) => {
+    console.error(err)
   })
 }
